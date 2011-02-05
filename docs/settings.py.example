@@ -1,0 +1,25 @@
+
+--------------------------------------------------
+EXAMPLE FOR SERVER
+--------------------------------------------------
+
+GROUP = ''
+
+APPS_LOCALDIR = '/var/whatpathever/'
+APPS_LOCALINFO = '/var/whatpathever/version.info'
+
+APPS_REMOTEDIR = 'applications/'
+APPS_REMOTEINFO = 'version.info'
+
+AWS_ACCESS_KEY_ID = '??'
+AWS_SECRET_ACCESS_KEY = '??'
+AWS_BUCKET_NAME = '??'
+
+
+--------------------------------------------------
+EXAMPLE FOR CONTROLLER
+--------------------------------------------------
+
+AWS_ACCESS_KEY_ID = '??'
+AWS_SECRET_ACCESS_KEY = '??'
+AWS_BUCKET_NAME = '??'

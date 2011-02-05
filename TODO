@@ -1,0 +1,9 @@
+
+Controller:
+- Updaterequest an alle Server senden
+
+Server:
+- Default-Apache und nginx config einrichten (ports, proxying and so on)
+- Init-SH Script der direkt auf die IM kopiert wird und bei jedem Boot milkywhite (TESTEN!)
+- cache-folders für nginx erzeugen
+- Logrotation und upload der log zu S3 implementieren
