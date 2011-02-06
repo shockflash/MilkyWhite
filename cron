@@ -1,0 +1,2 @@
+# 1 1 * * * Logrotate!
+*/5 * * * * /usr/bin/python /opt/milkywhite/milkywhite/server.py

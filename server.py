@@ -2,8 +2,7 @@ import os
 import shutil
 from xml.etree.ElementTree import fromstring, tostring, Element
 import settings
-
-
+from lib import get_bucket, get_versioninfo
 
 def install_packages():
     packages = [
@@ -32,7 +31,7 @@ def compare_applications():
     group = settings.GROUP
 
     local = open(settings.APPS_LOCALINFO).read()
-    remote = open(settings.APPS_REMOTEINFO).read()
+    remote = remote = get_versioninfo()
 
     """ Collect app list for local and remove """
     localApps = get_app_list(local)
@@ -133,12 +132,22 @@ def install(app, version):
     except:
         pass
 
-    shutil.copy(settings.APPS_REMOTEDIR + '/' + app + '.tar.bz2', local_dir)
-    os.system('cd ' + local_dir + ' && tar -jxvf %s' % app + '.tar.bz2')
-    os.unlink(os.path.join(local_dir, app + '.tar.bz2'))
+    localfile = os.path.join(local_dir, app + '.tar.bz2')
 
+    """ Download file form S3 """
+    bucket = get_bucket()
+    k = Key(bucket)
+    k.key = 'applications/' + app + '.tar.bz2'
+    k.get_contents_to_file(localfile)
+
+    """ extract file """
+    os.system('cd ' + local_dir + ' && tar -jxvf %s' % app + '.tar.bz2')
+    os.unlink(localfile)
+
+    """ Run install scrpt """
     os.system('cd ' + local_dir + ' && /bin/bash mwpackage/install.sh')
 
+    """ write new version to config """
     write_localinfo_new(app, version)
 
 def write_localinfo_remove(app):

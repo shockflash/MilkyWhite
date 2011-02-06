@@ -5,7 +5,7 @@ from boto.s3.key import Key
 from xml.etree.ElementTree import fromstring, tostring, Element
 import settings
 import sys
-
+from lib import get_bucket, get_versioninfo
 
 
 def upload(group, filename):
@@ -56,38 +56,6 @@ def info():
 
 # ------------------------------------------------------------------------------
 
-
-def get_bucket():
-    conn = boto.connect_s3(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
-
-    rs = conn.get_all_buckets()
-    bucket = None
-    for bucketentry in rs:
-        if bucketentry.name == settings.AWS_BUCKET_NAME:
-            bucket = bucketentry
-
-    return bucket
-
-
-# ------------------------------------------------------------------------------
-
-
-def get_versioninfo():
-    bucket = get_bucket()
-
-    """ get current version.info content """
-    xml = ''
-    try:
-        k = Key(bucket)
-        k.key = 'version.info'
-        xml = k.get_contents_as_string()
-    except:
-        pass
-
-    if xml.strip() == '':
-        xml = '<info></info>';
-
-    return xml
 
 def write_versioninfo(content):
     bucket = get_bucket()
@@ -152,6 +120,13 @@ def versioninfo_remove(group, app):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) == 1:
+        print ''
+        print 'Comamnds: upload, version, remove, info'
+        print 'Usage: python controller.py [command] [parameter...]  [...parameter]'
+        print ''
+        quit()
+
     if sys.argv[1] == 'upload':
         upload(sys.argv[2], sys.argv[3]);
 
