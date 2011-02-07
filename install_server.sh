@@ -10,7 +10,7 @@ rm -f *.gz
 cd milkywhite
 
 # install dependencies
-apt-get install python-virtualenv
+apt-get install -y python-virtualenv
 
 # setup settings 
 mkdir /etc/milkywhite/

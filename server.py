@@ -1,3 +1,4 @@
+import sys
 import os
 import shutil
 import boto
@@ -193,5 +194,12 @@ def write_localinfo_new(app, version):
     open(settings.APPS_LOCALINFO, 'w').write(tostring(dom))
 
 
-install_packages()
-compare_applications()
+# ------------------------------------------------------------------------------
+
+if __name__ == "__main__":
+
+    if len(sys.argv) == 1 or sys.argv[1] == '':
+        install_packages()
+        compare_applications()
+    elif sys.argv[1] == 'apps_only':
+        compare_applications()

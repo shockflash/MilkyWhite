@@ -1,9 +1,10 @@
 
-Controller:
-- Updaterequest an alle Server senden
-
 Server:
 - Default-Apache und nginx config einrichten (ports, proxying and so on)
 - Logrotation und upload der log zu S3 implementieren
+- Cron-lauf sollte keine Debian pakate prüfen, das sollte nur der Init
 
 
+Logrotate:
+http://serverfault.com/questions/201354/apache-logrotate-bash-question
+https://github.com/hansode/logrotate-s3
