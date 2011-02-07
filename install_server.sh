@@ -10,8 +10,7 @@ rm -f *.gz
 cd milkywhite
 
 # install dependencies
-apt-get install -y python-pip
-pip install boto
+apt-get install python-virtualenv
 
 # setup settings 
 mkdir /etc/milkywhite/
@@ -33,5 +32,11 @@ chmod 777 /opt/milkywhite/cache/tmp
 ln -s /opt/milkywhite/milkywhite/init.sh /etc/init.d/milkywhite
 update-rc.d milkywhite defaults
 chmod +x init.sh
+
+# setup virtual env, since the local boto is outdated
+
+virtualenv --no-site-packages /opt/milkywhite/env
+/opt/milkywhite/env/bin/easy_install pip
+/opt/milkywhite/env/bin/pip install -E /opt/milkywhite/env boto==2.0b3
 
 echo "\n\nREMEMBER TO CONFIGURE /etc/milkywhite/settings.py!\n\n"

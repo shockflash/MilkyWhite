@@ -8,6 +8,6 @@ COMMAND="$1"
 
 case $COMMAND in
 start) 
-  /usr/bin/python /opt/milkywhite/milkywhite/server.py
+  /opt/milkywhite/env/bin/python /opt/milkywhite/milkywhite/server.py
 ;;
 esac

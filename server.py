@@ -71,6 +71,9 @@ def compare_applications():
 def get_app_list(filecontent, group = False):
     list = {}
 
+    if filecontent.strip() == '':
+        filecontent = '<info></info>'
+
     dom = fromstring(filecontent)
     for node in dom:
         if group and node.attrib['name'] != group:
@@ -106,7 +109,7 @@ def handle_webserver():
 def upgrade(app, version):
     print "UPGRADE " + app, version
     uninstall(app)
-    install(app)
+    install(app, version)
 
 def uninstall(app):
     print "UNINSTALL " + app
@@ -115,8 +118,8 @@ def uninstall(app):
 
     local_dir = os.path.join(settings.APPS_LOCALDIR, app)
 
+    os.system('cd ' + local_dir + ' && /bin/bash mwpackage/uninstall.sh')
     try:
-        os.system('cd ' + local_dir + ' && /bin/bash mwpackage/uninstall.sh')
         os.removedirs(local_dir)
     except:
         pass
@@ -139,8 +142,8 @@ def install(app, version):
     """ Download file form S3 """
     bucket = get_bucket()
     k = Key(bucket)
-    k.key = 'applications/' + app + '.tar.bz2'
-    k.get_contents_to_file(localfile)
+    k.key = 'applications/' + app + '_' + version + '.tar.bz2'
+    k.get_contents_to_file(open(localfile, 'w'))
 
     """ extract file """
     os.system('cd ' + local_dir + ' && tar -jxvf %s' % app + '.tar.bz2')
@@ -154,6 +157,10 @@ def install(app, version):
 
 def write_localinfo_remove(app):
     local = open(settings.APPS_LOCALINFO).read()
+
+    if local.strip() == '':
+        local = '<info><local></local></info>'
+
     dom = fromstring(local)
 
     """ remove and old entry, if exists """
@@ -166,6 +173,10 @@ def write_localinfo_remove(app):
 
 def write_localinfo_new(app, version):
     local = open(settings.APPS_LOCALINFO).read()
+
+    if local.strip() == '':
+        local = '<info><local></local></info>'
+
     dom = fromstring(local)
 
     """ remove and old entry, if exists """
