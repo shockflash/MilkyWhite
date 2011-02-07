@@ -1,5 +1,7 @@
 import os
 import shutil
+import boto
+from boto.s3.key import Key
 from xml.etree.ElementTree import fromstring, tostring, Element
 import settings
 from lib import get_bucket, get_versioninfo

@@ -1,3 +1,8 @@
+import boto
+from boto.s3.key import Key
+from xml.etree.ElementTree import fromstring, tostring, Element
+import settings
+
 def get_bucket():
     conn = boto.connect_s3(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
 
