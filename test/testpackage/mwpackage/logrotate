@@ -1,0 +1,36 @@
+/opt/milkywhite/apps/testpackage/logs/apache/*.log {
+    daily
+    missingok
+    rotate 52
+    compress
+    create 640 root adm
+    sharedscripts
+    postrotate
+        if [ -f "`. /etc/apache2/envvars ; echo ${APACHE_PID_FILE:-/var/run/apache2.pid}`" ]; then
+            /etc/init.d/apache2 reload > /dev/null
+        fi
+        
+        /opt/milkywhite/env/bin/python /opt/milkywhite/milkywhite/server.py uploadlog testpackage apache /opt/milkywhite/apps/testpackage/logs/apache/access.1.gz
+        /opt/milkywhite/env/bin/python /opt/milkywhite/milkywhite/server.py uploadlog testpackage apache /opt/milkywhite/apps/testpackage/logs/apache/error.1.gz
+       
+        # TODO LOG UPLOAD TO S3!!!
+        # BEST VIA server.py file, since there are the settings!!!
+        
+    endscript
+}
+
+/opt/milkywhite/apps/testpackage/logs/nginx/*.log {
+    daily
+    missingok
+    rotate 52
+    compress
+    create 640 root adm
+    sharedscripts
+    postrotate
+        [ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`
+       
+        /opt/milkywhite/env/bin/python /opt/milkywhite/milkywhite/server.py uploadlog testpackage nginx /opt/milkywhite/apps/testpackage/logs/nginx/access.1.gz
+        /opt/milkywhite/env/bin/python /opt/milkywhite/milkywhite/server.py uploadlog testpackage nginx /opt/milkywhite/apps/testpackage/logs/nginx/error.1.gz     
+        
+    endscript
+}

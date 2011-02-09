@@ -3,13 +3,15 @@ from boto.s3.key import Key
 from xml.etree.ElementTree import fromstring, tostring, Element
 import settings
 
-def get_bucket():
-    conn = boto.connect_s3(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
+def get_bucket(key = settings.AWS_ACCESS_KEY_ID, secret = settings.AWS_SECRET_ACCESS_KEY,
+               bucket_name = settings.AWS_BUCKET_NAME):
+
+    conn = boto.connect_s3(key, secret)
 
     rs = conn.get_all_buckets()
     bucket = None
     for bucketentry in rs:
-        if bucketentry.name == settings.AWS_BUCKET_NAME:
+        if bucketentry.name == bucket_name:
             bucket = bucketentry
 
     return bucket

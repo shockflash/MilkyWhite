@@ -11,5 +11,5 @@
 
 # In a real-live situation, the version would be dynamic and given by paramter or taken from a
 # VCS like subversion or git.
-rm -f ../testpackage_version1.tar.bz2
-tar -jcf ../testpackage_version1.tar.bz2 .
+rm -f ../testpackage_version2.tar.bz2
+tar -jcf ../testpackage_version2.tar.bz2 .

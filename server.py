@@ -2,6 +2,7 @@ import sys
 import os
 import shutil
 import boto
+import urllib
 from boto.s3.key import Key
 from xml.etree.ElementTree import fromstring, tostring, Element
 import settings
@@ -193,6 +194,31 @@ def write_localinfo_new(app, version):
 
     open(settings.APPS_LOCALINFO, 'w').write(tostring(dom))
 
+def get_hostname():
+    """ Get the hostname. WARNING: THIS IS SOME CODE OPTIMIZED FOR AMAZON
+    INSTANCES!! """
+
+    url = 'http://%s/%s/%s/' % ('169.254.169.254', '1.0', 'meta-data/instance-id')
+    value = urllib.urlopen(url).read()
+    if "404 - Not Found" in value:
+       return 'unknown'
+
+    return value
+
+def upload_log(app, sys, filename):
+    bucket = get_bucket()
+
+    get_bucket(settings.AWS_LOGS_ACCESS_KEY_ID, settings.AWS_LOGS_SECRET_ACCESS_KEY,
+               settings.AWS_LOGS_BUCKET_NAME)
+
+    basename = os.path.basename(filename)
+    hostname = get_hostname()
+
+    k = Key(bucket)
+    k.key = 'milkywhite/' + '_'.join(hostname, app, sys, basename)
+    k.set_contents_from_filename(filename)
+
+    print "Upload finished"
 
 # ------------------------------------------------------------------------------
 
@@ -201,5 +227,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 1 or sys.argv[1] == '':
         install_packages()
         compare_applications()
-    elif sys.argv[1] == 'apps_only':
+    elif sys.argv[1] == 'appsonly':
         compare_applications()
+    elif sys.argv[1] == 'uploadlog':
+        upload_log(sys.argv[2], sys.argv[3], sys.argv[4])

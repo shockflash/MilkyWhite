@@ -1,2 +1,2 @@
 # 1 1 * * * Logrotate!
-*/5 * * * * root /opt/milkywhite/env/bin/python /opt/milkywhite/milkywhite/server.py apps_only
+*/5 * * * * root /opt/milkywhite/env/bin/python /opt/milkywhite/milkywhite/server.py appsonly
