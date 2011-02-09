@@ -1,0 +1,89 @@
+MilkyWhite
+=================================================================
+
+MilkyWhite is a simple application environment designed for django. Is was developed to create an 
+easy and understandable foundation for django application hosting. It setups an application/webserver 
+to host the application and handles the installation/uninstallation of the application on the server.
+
+There can be multiple servers at the same time, working independent of each other (and do not need to
+know each other). Every server is part of a group and every server in a group has the same apps in the
+same version, but different groups can host different apps, or the same apps in different versions 
+(like stable/unstalbe).
+
+The basic design of MilkyWhite is optimized for cloud hosters and uses amazon s3 to host the package
+files and the central package index. Nothing else is shared between the servers.
+An S3 storage is also used to collect the log files of the servers.
+
+The setup of each server consists of nginx as frontend server and apache as mod_wsgi hoster.
+Every package can, but doesn't need to, add own configs to these two servers.
+
+To upload an application, switch version or upload a new version, the admin can/must use the 
+controller(.py) in the MilkyWhite directory. It only changes the files on the S3 share, but do
+not touch the server directly (at the moment, at least).
+On the server, cron will start the server.py every 5 minutes to check for new data on S3. 
+This is also done on boot time, which is important if you use an preconfigured Image to start new servers,
+like it is common with auto-scale solutions.
+
+Both server and controller need a settings.py in there own directory.
+
+Installation
+============
+
+Install a basic Ubuntu 10.04 system, download the install_server.sh from the repository and run it.
+It will setup MilkyWhite itself. It also downloads MilkyWhite form the main repository. 
+
+If you don't want to use it that way, please do the steps inside of the install_server.sh on your own.
+
+Usage of the Controller
+=======================
+
+How to use:
+-----------
+python controller.py [command] [parameter] ... [parameter] 
+
+
+Upload-Command:
+-------------
+Uploads a new application version to a specific server group
+
+Command:
+python controller.py upload [group] [file]
+
+Example:
+python controller.py upload stable ../../build/myapp_436346436.bzip2
+
+After the upload, the version.info is update.
+Then, one server is updated first, to run one-time tasks like db migration.
+After that, all servers are called to update there applications.
+
+Version-Command:
+----------------
+Switch to another version of an application.
+
+Command:
+python controller.py version [group] [app] [version]
+
+Example:
+python controller.py version stable myapp v1022
+
+The command updates the version.info file, but only if there is really that
+version on the server.
+After that, all servers are updated.
+
+Remove-Command:
+--------------
+Removes a file from a server (but keeps the files on s3)
+
+Command:
+python controller.py remove [group] [app]
+
+Example:
+python controller.py remove stable oldappname
+
+Info-Command:
+--------------
+List all groups, there apps and versions in the version.info file
+
+Command:
+python controller.py info
+

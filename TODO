@@ -2,6 +2,10 @@
 Server:
 - Default-Apache und nginx config einrichten (ports, proxying and so on)
 - Logrotation und upload der log zu S3 implementieren
+  -> Jede App sollte eigene Logs haben. Diese sollten, wenn vorhanden, nach festem Muster innerhalb der App in einem Ordner
+     logs/ liegen, jeweils mit einem Unterordner pro Server (logs/nginx/, logs/apache/). 
+  -> Waeren auch Logs der Anwendung moeglich? Wie werden diese "routiert"? Vor allem fuer Zugriffslogs und Errorlogs von Django
+     koennte das nuetzlich sein
 - Cron-lauf sollte keine Debian pakate prüfen, das sollte nur der Init
 
 

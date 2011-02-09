@@ -1,0 +1,22 @@
+
+--------------------------------------------------
+EXAMPLE FOR SERVER
+--------------------------------------------------
+
+GROUP = ''
+
+APPS_LOCALDIR = '/opt/milkywhite/apps/'
+APPS_LOCALINFO = '/opt/milkywhite/version.info'
+
+AWS_ACCESS_KEY_ID = '??'
+AWS_SECRET_ACCESS_KEY = '??'
+AWS_BUCKET_NAME = '??'
+
+
+--------------------------------------------------
+EXAMPLE FOR CONTROLLER
+--------------------------------------------------
+
+AWS_ACCESS_KEY_ID = '??'
+AWS_SECRET_ACCESS_KEY = '??'
+AWS_BUCKET_NAME = '??'
