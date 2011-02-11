@@ -1,3 +1,4 @@
 settings.py
 *.pyc
 testdaten/
+*.tar.bz2
